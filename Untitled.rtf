@@ -1,0 +1,72 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww44600\viewh25200\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 import requests\
+\
+def get_search_results(query):\
+    # Function to fetch search results from Bing and Google\
+    headers = \{\
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'\
+    \}\
+\
+    # Bing search API\
+    bing_url = 'https://api.bing.microsoft.com/v7.0/search'\
+    bing_params = \{\
+        'q': query,\
+        'count': 5  # Number of search results to fetch\
+    \}\
+    bing_response = requests.get(bing_url, headers=headers, params=bing_params)\
+    bing_results = bing_response.json()\
+\
+    # Google search API\
+    google_url = 'https://www.googleapis.com/customsearch/v1'\
+    google_params = \{\
+        'key': 'YOUR_GOOGLE_API_KEY',  # Replace with your Google API key\
+        'cx': 'YOUR_CUSTOM_SEARCH_ENGINE_ID',  # Replace with your Custom Search Engine ID\
+        'q': query,\
+        'num': 5  # Number of search results to fetch\
+    \}\
+    google_response = requests.get(google_url, headers=headers, params=google_params)\
+    google_results = google_response.json()\
+\
+    return bing_results, google_results\
+\
+def fact_check(question):\
+    # Function to fact check the GPT-4 answer\
+    gpt4_answer = gpt4_generate_answer(question)  # Generate GPT-4 answer using your preferred method\
+\
+    bing_results, google_results = get_search_results(question)\
+\
+    # Compare GPT-4 answer with search results\
+    relevant_answers = [result['snippet'] for result in bing_results['webPages']['value']] + [result['snippet'] for result in google_results['items']]\
+\
+    for answer in relevant_answers:\
+        # Perform comparison between GPT-4 answer and each relevant answer\
+        # You can use various techniques like fuzzy matching or NLP-based similarity\
+        # algorithms to determine the accuracy of the answer\
+        similarity_score = compute_similarity(gpt4_answer, answer)\
+\
+        if similarity_score >= threshold:  # Replace 'threshold' with your desired similarity threshold\
+            return gpt4_answer, True  # GPT-4 answer is accurate\
+\
+    return gpt4_answer, False  # GPT-4 answer is inaccurate\
+\
+def gpt4_generate_answer(question):\
+    # Function to generate GPT-4 answer\
+    # Implement your code to generate the answer using GPT-4\
+\
+    return generated_answer\
+\
+# Example usage\
+user_query = "What is the capital of France?"\
+gpt4_answer, is_accurate = fact_check(user_query)\
+\
+if is_accurate:\
+    print("GPT-4 Answer:", gpt4_answer)\
+else:\
+    print("GPT-4 Answer is inaccurate. Please provide feedback.")\
+}
